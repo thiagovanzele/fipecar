@@ -24,6 +24,11 @@ public class Principal {
 		
 		Dados marcaFiltrada = escolheMarca(marcas);
 		
+		endereco += marcaFiltrada.codigo() + "/modelos/";
+		
+		json = ConsomeApiService.retornaJson(endereco);
+		System.out.println(json);
+		
 	}
 	
 	public static String escolheTipo() {
@@ -47,4 +52,6 @@ public class Principal {
 		String marcaSelecionada = sc.nextLine();
 		return listaMarcas.stream().filter(n -> n.nome().toLowerCase().contains(marcaSelecionada.toLowerCase())).findFirst().orElseThrow(() -> new FilterException("Não encontrado"));
 	}
+	
+	
 }

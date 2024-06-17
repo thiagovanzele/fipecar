@@ -10,8 +10,9 @@ public class Principal {
 		
 		System.out.println("\n[1] - Carros\n[2] - Motos\n[3] - Caminhões");
 		System.out.print("\nSua opção: ");
-		Integer opcao = sc.nextInt();
-		
+		Integer opcao = sc.nextInt();			
 		
 	}
+	
+
 }

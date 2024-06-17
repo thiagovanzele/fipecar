@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import br.com.vanzele.application.model.entities.Dados;
 import br.com.vanzele.application.model.entities.Modelos;
+import br.com.vanzele.application.model.entities.Veiculo;
 import br.com.vanzele.model.exceptions.FilterException;
 import br.com.vanzele.model.services.ConsomeApiService;
 import br.com.vanzele.model.services.CriaObjetoService;
@@ -23,22 +24,35 @@ public class Principal {
 		String tipoVeiculo = escolheTipo();
 		String endereco = URL_BASE + tipoVeiculo + "/marcas/";
 		String json = ConsomeApiService.retornaJson(endereco);
-		List<Dados> marcas = service.retornaListaDados(json, Dados.class);
 		System.out.println("\n|" + tipoVeiculo.toUpperCase() + "|\n");
 		
+		//Lista com todas as marcas disponíveis na API
+		List<Dados> marcas = service.retornaListaDados(json, Dados.class);
+		
+		//Lista com todos os modelos disponíveis da marca
 		Dados marcaFiltrada = escolheMarca(marcas);
+		System.out.println("\n|" + marcaFiltrada.nome().toUpperCase() + "|\n");
 		
 		endereco += marcaFiltrada.codigo() + "/modelos/";
-		
 		json = ConsomeApiService.retornaJson(endereco);
 		Modelos modelos = service.retornaDado(json, Modelos.class);
+		
+		//Lista com os modelos disponíveis baseado no nome que usuário escolheu
 		List<Dados> modelosDisponiveis = escolheNomeDoVeiculo(modelos);
 		exibeModelos(modelosDisponiveis);
 		
-
 		endereco += escolheCodigoVeiculo();
 		json = ConsomeApiService.retornaJson(endereco);
-		System.out.println(json);
+		
+		//Lista com o modelo especifico dado pelo usuário
+		List<Dados> listaModelosDisponiveis = service.retornaListaDados(json, Dados.class);
+		exibeModelos(listaModelosDisponiveis);
+		
+		endereco += escolheAnoModelo();
+		json = ConsomeApiService.retornaJson(endereco);
+		
+		Veiculo veiculo = service.retornaDado(json, Veiculo.class);
+		System.out.println(veiculo);
 	}
 	
 	public static String escolheTipo() {
@@ -71,7 +85,7 @@ public class Principal {
 	}
 	
 	public static String escolheCodigoVeiculo() {
-		System.out.println("\nCódigo: ");
+		System.out.print("\nCódigo: ");
 		String codigo = sc.nextLine();
 		return codigo + "/anos/";
 	}
@@ -81,5 +95,11 @@ public class Principal {
 			System.out.print("[Codigo: " + m.codigo() + "]");
 			System.out.println(" - " + m.nome());
 		}
+	}
+	
+	public static String escolheAnoModelo() {
+		System.out.print("Codigo: ");
+		String codigo = sc.nextLine();
+		return codigo;
 	}
 }
